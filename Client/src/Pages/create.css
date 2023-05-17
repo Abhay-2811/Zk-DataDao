@@ -1,0 +1,9 @@
+.create-dao{
+    display: flex;
+    flex-direction: column;
+    margin: 20%;
+}
+
+.create-dao input{
+    margin: 10px 0 10px 0
+}
