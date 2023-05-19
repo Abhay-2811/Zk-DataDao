@@ -32,7 +32,12 @@ const SelectedOption = props => {
   }
   if (props.option === 'Twitter following restriction') {
     return (
-      <p style={{ margin: '10px 0 10px 0' }}>Feature not available yet !</p>
+      <p style={{ margin: '10px 0 10px 0',
+      border: '2px solid rgb(200, 200, 200)',
+      borderRadius: '20px',
+      width: '100%',
+      padding: '0.8em',
+    color:'red'}}>Feature not available yet !</p>
     )
   }
 }
@@ -85,18 +90,24 @@ const Create = () => {
       :
       <div className='create-dao'>
         <h2>Create DAO</h2>
+
         <label htmlFor="daoName">DAO Name</label>
         <input type="text" id='daoName'/>
+
         <label htmlFor='daoCapacity'>Dao Capacity</label>
         <input type='number' id='daoCapacity' min={1} />
+
         <label htmlFor='DAOend'>DAO End Date</label>
         <input type='date' name='DAOend' id='DAOend' />
+
         <label htmlFor='daoCapacity'>
           DAO reward (this will be distributed equally among contributers)
         </label>
         <input type='number' id='daoCapacity' min={1} />
+
         <label htmlFor="req">Data Format Requirements</label>
         <UploadFile />
+
         <label htmlFor='zkpOtions'>ZKP options</label>
         <Select
           className='basic-single'
@@ -105,6 +116,7 @@ const Create = () => {
           options={zkpOptions}
           onChange={e => setSelected(e.value)}
         />
+
         {selected && <SelectedOption option={selected} />}
         <button className='create-button' onClick={deployContract} >
           <span class='button_top'> Create Dao</span>

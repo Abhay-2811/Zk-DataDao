@@ -3,12 +3,22 @@
     flex-direction: column;
     margin-left: 20%;
     margin-right: 20%;
-    margin-top: 5%;
+    margin-top: 20px;
     justify-content: space-between;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.create-dao h2{
+    margin-left: 35%;
 }
 
 .create-dao input {
-    margin: 10px 0 10px 0
+    margin: 10px 0 10px 0;
+    border: 2px solid rgb(200, 200, 200);
+    border-radius: 20px;
+    width: 100%;
+    padding: 0.8em;
+
 }
 
 .create-dao button{
@@ -26,6 +36,8 @@
     border: none;
     border-radius: var(--button_radius);
     background: var(--button_outline_color);
+    margin-left: 35%;
+
 }
 
 .button_top {

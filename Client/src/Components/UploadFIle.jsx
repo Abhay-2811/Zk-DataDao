@@ -85,9 +85,13 @@ const UploadFile = () => {
   }
 
   return (
-    <div style={{border:'1px solid grey',padding:'4px',marginTop:'6px',marginBottom:'6px'}}>
+    <div >
     {uploading ? 
-    <>{uploaded ? <span> ✅ Data deal created </span> : <span> <ClipLoader size={15} /> Creating Data Deal on FVM</span>} </>:
+    <div style={{ margin: '10px 0 10px 0',
+        border: '2px solid rgb(200, 200, 200)',
+        borderRadius: '20px',
+        width: '100%',
+        padding: '0.8em'}}>{uploaded ? <span> ✅ Data deal created </span> : <span> <ClipLoader size={15} /> Creating Data Deal on FVM</span>} </div>:
     <input type='file' name='DAOres' id='res' onChange={(e)=>{uploadFile(e)}} />
     }
     <span></span>
