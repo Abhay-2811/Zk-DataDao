@@ -86,14 +86,16 @@ const Create = () => {
         <h2>Create DAO</h2>
         <label htmlFor="daoName">DAO Name</label>
         <input type="text" id='daoName'/>
-        <label htmlFor='daoCapacity'>DaoCapacity</label>
+        <label htmlFor='daoCapacity'>Dao Capacity</label>
         <input type='number' id='daoCapacity' min={1} />
-        <label htmlFor='DAOend'>DAO end date</label>
+        <label htmlFor='DAOend'>DAO End Date</label>
         <input type='date' name='DAOend' id='DAOend' />
         <label htmlFor='daoCapacity'>
           DAO reward (this will be distributed equally among contributers)
         </label>
         <input type='number' id='daoCapacity' min={1} />
+        <label htmlFor="req">Data Format Requirements</label>
+        <input type="file" name="reqFile" id="req" />
         <label htmlFor='zkpOtions'>ZKP options</label>
         <Select
           className='basic-single'
