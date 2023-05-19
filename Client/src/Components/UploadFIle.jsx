@@ -1,20 +1,27 @@
 import React, { useState } from 'react'
-import { useContractWrite, useAccount } from 'wagmi'
+import { useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
 import { dealClient } from '../Constants/contract'
 import lighthouse from '@lighthouse-web3/sdk'
+import { ClipLoader  } from 'react-spinners'
 const CID = require('cids')
 
 const UploadFile = () => {
   const { address,isConnected } = useAccount()
-  const { write } = useContractWrite({
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const { write,data } = useContractWrite({
     address: dealClient.address,
     abi: dealClient.abi,
     chainId: 3141,
     functionName: 'makeDealProposal',
-    onSuccess (data) {
-      console.log(data)
-    }
   });
+  const waitForTransaction = useWaitForTransaction({
+    chainId: 3141,
+    hash: data?.hash,
+    onSuccess(data){
+        setUploaded(true)
+    }
+    })
 
 
   // helper function for upload img function
@@ -47,11 +54,8 @@ const UploadFile = () => {
 
   const dataDeal = async (cid, carLink, fileSize) => {
     try {
-
       console.log('deal initiated ....')
-      console.log(cid);
-      console.log(carLink);
-      console.log(fileSize);
+      setUploading(true);
       const cidHexRaw = new CID(cid).toV1().toString('base16').substring(1)
       const cidHex = "0x" + cidHexRaw
       if (isConnected) {
@@ -79,8 +83,15 @@ const UploadFile = () => {
       return
     }
   }
+
   return (
+    <div style={{border:'1px solid black',padding:'4px',marginTop:'6px',marginBottom:'6px'}}>
+    {uploading ? 
+    <>{uploaded ? <span> ✅ Data deal created </span> : <span> <ClipLoader size={15} /> Creating Data Deal on FVM</span>} </>:
     <input type='file' name='DAOres' id='res' onChange={(e)=>{uploadFile(e)}} />
+    }
+    <span></span>
+    </div>
   )
 }
 
