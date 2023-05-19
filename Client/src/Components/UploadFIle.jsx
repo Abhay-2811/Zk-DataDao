@@ -1,77 +1,87 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useContractWrite, useAccount } from 'wagmi'
+import { dealClient } from '../Constants/contract'
+import lighthouse from '@lighthouse-web3/sdk'
+const CID = require('cids')
 
 const UploadFile = () => {
-  const client = new Web3Storage({
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEU0NjhDOTU2ZTM4MjQyMDlhMzdCNkVlZDZkQjExMTE4YzE3ZGQ0MzMiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2Nzk1MDU0NDc0NjAsIm5hbWUiOiJ1cGxvYWQifQ.XH3sRMYQyZMrJKoTba4xxJI5K-8zJvkCAuqRWuGtOBg'
-  })
-    const uploadFile = async () => {
-        const fileToUpload = new File([file], file.name.split(' ').join(''), {
-          type: file.type
-        })
-        console.log(fileToUpload);
-        const fileSize = fileToUpload.size
-        cid = await client.put([fileToUpload], {
-          name: file.name
-        })
-        console.log(fileToUpload.size);
-        carLink = `https://ipfs.io/ipfs/${cid}?format=car`
-    
-        // *TODO* is uploading == false
-        return { cid: cid, fileSize: fileSize, imgUrl: carLink }
-      }
-  const dataDeal = async () => {
+  const { address,isConnected } = useAccount()
+  const { write } = useContractWrite({
+    address: dealClient.address,
+    abi: dealClient.abi,
+    chainId: 3141,
+    functionName: 'makeDealProposal',
+    onSuccess (data) {
+      console.log(data)
+    }
+  });
+
+
+  // helper function for upload img function
+  const progressCallback = progressData => {
+    let percentageDone =
+      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2)
+    console.log(percentageDone)
+  }
+  const uploadFile = async (e) => {
+    const output = await lighthouse.upload(
+      e,
+      process.env.REACT_APP_LHAPI,
+      progressCallback
+    );
+    const file = e.target.files;
+    console.log(file[0].size);
+    const fileSize = file[0].size;
+    console.log('File Status:', output)
+    console.log(
+      'Visit at https://gateway.lighthouse.storage/ipfs/' + output.data.Hash
+    )
+    const hash = output.data.Hash;
+    console.log(hash);
+
+    const carLink = `https://ipfs.io/ipfs/${hash}?format=car`
+    await dataDeal(hash,carLink,fileSize);
+
+  }
+
+
+  const dataDeal = async (cid, carLink, fileSize) => {
     try {
-      setLC('Creating Data Deal On FVM .....')
+
       console.log('deal initiated ....')
-      const _CID = new CID(cid) //careful - different data type of (cid), CID is from library , and _CID is the one here
-      const { ethereum } = window
-      if (ethereum) {
-        const provider = new ethers.BrowserProvider(ethereum)
-        const signer = await provider.getSigner()
-        dealClient = new ethers.Contract(contractAddress, contractABI, signer)
-        const extraParamsV1 = [
-          carLink,
-          10000, //for @abhay - change this in future
-          false,
-          false
-        ]
-        const DealRequestStruct = [
-          _CID.bytes,
-          fileSize,
-          false,
-          cid,
-          184200, //startEpoch - be sure to check while final deploy
-          200000, // end epoch - '👆'
-          0,
-          0,
-          0,
-          1,
-          extraParamsV1
-        ]
-        console.log(dealClient.interface)
-        const transaction = await dealClient.makeDealProposal(DealRequestStruct)
-        console.log('Proposing deal...')
-        const receipt = await transaction.wait()
-        console.log(receipt)
-
-        dealClient.on('DealProposalCreate', (id, size, verified, price) => {
-          console.log(id, size, verified, price)
-        })
-
-        console.log('Deal proposed! CID: ' + _CID)
-        //after success everything is done
-        setLoading(false)
-        setSucess(true)
-      } else {
-        console.log("Ethereum object doesn't exist!")
+      console.log(cid);
+      console.log(carLink);
+      console.log(fileSize);
+      const cidHexRaw = new CID(cid).toV1().toString('base16').substring(1)
+      const cidHex = "0x" + cidHexRaw
+      if (isConnected) {
+          const extraParamsV1 = [carLink, 10000, false, false]
+          const DealRequestStruct = [
+              cidHex,
+              fileSize,
+              false,
+              cid,
+              300200, //startEpoch - be sure to check while final deploy
+              370000, // end epoch - '👆'
+              0,
+              0,
+              0,
+              1,
+              extraParamsV1
+            ]
+            write({
+                args: [DealRequestStruct],
+                from: address
+              });
       }
     } catch (error) {
       console.log(error)
       return
     }
   }
-  return <div>UploadFIle</div>
+  return (
+    <input type='file' name='DAOres' id='res' onChange={(e)=>{uploadFile(e)}} />
+  )
 }
 
-export default UploadFIle
+export default UploadFile

@@ -13,6 +13,7 @@ import { polygonMumbai } from 'viem/chains'
 import { ContractData } from '../Constants/contract'
 import { useAccount } from 'wagmi'
 import { Loader } from '../Components/Loader'
+import UploadFile from '../Components/UploadFIle'
 
 const SelectedOption = props => {
   if (props.option === 'Age restriction') {
@@ -95,7 +96,7 @@ const Create = () => {
         </label>
         <input type='number' id='daoCapacity' min={1} />
         <label htmlFor="req">Data Format Requirements</label>
-        <input type="file" name="reqFile" id="req" />
+        <UploadFile />
         <label htmlFor='zkpOtions'>ZKP options</label>
         <Select
           className='basic-single'

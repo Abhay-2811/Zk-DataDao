@@ -7,7 +7,7 @@ import Navbar from './Components/Navbar'
 import Profile from './Pages/Profile'
 import '@rainbow-me/rainbowkit/styles.css'
 import { WagmiConfig, createConfig, configureChains, mainnet } from 'wagmi'
-import { polygon, polygonMumbai } from 'wagmi/chains'
+import { filecoinHyperspace } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import {
   getDefaultWallets,
@@ -17,7 +17,7 @@ import {
 
 function App () {
   const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [mainnet, polygon, polygonMumbai],
+    [filecoinHyperspace],
     [publicProvider()]
   )
   const { connectors } = getDefaultWallets({
