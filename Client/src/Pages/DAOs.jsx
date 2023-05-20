@@ -2,6 +2,7 @@ import React from 'react'
 import { daos } from '../Constants/fakeDAOs'
 import { useSearchParams, useLocation } from 'react-router-dom'
 import axios from 'axios'
+import ZKdiscord from '../Components/ZKdiscord'
 
 const DAOs = props => {
   let names = new Array();
@@ -33,12 +34,20 @@ const DAOs = props => {
   }
   if (Discordparam && Daoparam) {
     get();
-    return <div>Param Exists</div>
+    return (
+      <>
+        <div>Param Exists</div>
+        <ZKdiscord />
+      </>
+      
+    )
   } else {
     return (
-      <a href='https://discord.com/api/oauth2/authorize?client_id=1109245990302662787&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fdaos%3Fdao%3Dabc&response_type=token&scope=guilds'>
-        Press me
-      </a>
+      <><a href='https://discord.com/api/oauth2/authorize?client_id=1109245990302662787&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fdaos%3Fdao%3Dabc&response_type=token&scope=guilds'>
+      Press me
+    </a>
+    <ZKdiscord />
+    </>
     )
   }
 }
