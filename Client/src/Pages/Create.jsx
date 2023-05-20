@@ -16,7 +16,7 @@ import { Loader } from '../Components/Loader'
 import UploadFile from '../Components/UploadFIle'
 
 const SelectedOption = props => {
-  if (props.option === 'Age restriction') {
+  if (props.option === 'Age') {
     return (
       <>
         <label htmlFor='' style={{ marginTop: '10px' }}>
@@ -30,7 +30,21 @@ const SelectedOption = props => {
       </>
     )
   }
-  if (props.option === 'Twitter following restriction') {
+  if(props.option ==='Discord'){
+    return(
+      <>
+        <label htmlFor='' style={{ marginTop: '10px' }}>
+          Dicord Channel
+        </label>
+        <input
+          style={{ margin: '10px 0 10px 0' }}
+          placeholder='Discord Channel'
+          type='text'
+        />
+      </>
+    )
+  }
+  if (props.option === 'Social') {
     return (
       <p style={{ margin: '10px 0 10px 0',
       border: '2px solid rgb(200, 200, 200)',
@@ -75,9 +89,10 @@ const Create = () => {
   }
 
   const zkpOptions = [
-    { value: 'none', label: 'None' },
-    { value: 'Age restriction', label: 'Age' },
-    { value: 'Twitter following restriction', label: 'Social' }
+    { label: 'None', value: 'none' },
+    { label: 'Age restriction', value: 'Age' },
+    { label: 'Twitter following restriction', value: 'Social' },
+    {label: 'Follow Discord Server', value: 'Discord'}
   ]
 
   return (
