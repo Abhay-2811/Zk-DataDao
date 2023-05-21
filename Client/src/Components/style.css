@@ -1,9 +1,18 @@
-.zk-button {
+.zk-page{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+
+}
+.zk-page p{
+    overflow-x: scroll;
+}
+.zk-button {
     --button_radius: 0.75em;
     --button_color: #e8e8e8;
     --button_outline_color: #000000;
@@ -12,13 +21,10 @@
     border: none;
     border-radius: var(--button_radius);
     background: var(--button_outline_color);
+    margin: 20px;
 }
 .dao-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    margin: 20px;
     --button_radius: 0.75em;
     --button_color: #e8e8e8;
     --button_outline_color: #000000;

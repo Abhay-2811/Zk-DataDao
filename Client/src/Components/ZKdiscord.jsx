@@ -3,6 +3,7 @@ import { initialize } from 'zokrates-js'
 import './style.css'
 const ZKdiscord = (props) => {
 	const [res,setRes] = useState();
+	const [showProof, setShowProof] = useState(false);
 
   const handleSubmit = async () => {
 	initialize().then((zokratesProvider) => {
@@ -25,24 +26,22 @@ const ZKdiscord = (props) => {
 		);
 		console.log(proof, inputs);
 		setRes(JSON.stringify(proof));
+		setShowProof(true)
 	})
 
   }
 
   return (
-	<div>
-	<span>{res}</span>
-	<div>
+	<div className='zk-page'>
 	<button onClick={handleSubmit} className='zk-button'>
 		<span className='zk-button_top'>Generate Proof</span>
 	</button>
-	</div>
-	<div>
+	{
+		showProof ? <p>{res}</p> : <p></p> 
+	}
 	<button className='dao-button'>
 		<span className='zk-button_top'>Join DAO</span>
 	</button>
-	</div>
-	
 	</div>
 	)
 }
