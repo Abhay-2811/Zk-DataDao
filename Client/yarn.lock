@@ -2974,6 +2974,25 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
+"@tableland/evm@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@tableland/evm/-/evm-4.2.2.tgz#c042fe7d174de69796942bc6625c2ff0636d3ef6"
+  integrity sha512-itcUWvnZ4CDujVXlP9SKM49Tfo1mawynf0PooceA76JqGMFKaO1f5LArD7Xss0YOvRMtRpQbELbfNdznIk+FGw==
+
+"@tableland/sdk@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@tableland/sdk/-/sdk-4.2.2.tgz#6a37ff80a94d32be9e75abd0258dbb9caa6e95ee"
+  integrity sha512-LYqXMtyU0YGizrVlPJmYXgIf+DhV+U1epdVat0zZYksNvO8NRJxx40k7R5ZqMVkB0dhgYdB1ybbsLBD8lLWjXA==
+  dependencies:
+    "@tableland/evm" "^4.2.2"
+    "@tableland/sqlparser" "^1.0.6-pre.5"
+    ethers "^5.7.2"
+
+"@tableland/sqlparser@^1.0.6-pre.5":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@tableland/sqlparser/-/sqlparser-1.0.6.tgz#8c89d4694c06eca3cacae9fcdfdc7e1090f84a68"
+  integrity sha512-fSoR4hslQqcvkjU0JvRG70fWEVOsbJc8177LqaHC2r2DDC2328Kho/t+aeG5qho4gvSuZckDcKEgeCugD1m5Mg==
+
 "@tanstack/query-core@4.29.7":
   version "4.29.7"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.7.tgz#9fe4587e23cb9566b937c518ffa44226041d388d"

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { daos } from '../Constants/fakeDAOs'
 import { useSearchParams, useLocation } from 'react-router-dom'
 import axios from 'axios'
@@ -11,17 +11,9 @@ const DAOs = props => {
   const location = useLocation()
   const Discordparam = location.hash?.split('&')[1]?.split('=')[1]
   const Daoparam = searchParams.get('dao')
-  String.prototype.hashCode = function() {
-    var hash = 0,
-      i, chr;
-    if (this.length === 0) return hash;
-    for (i = 0; i < this.length; i++) {
-      chr = this.charCodeAt(i);
-      hash = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
-  }
+  const reqSer = 'ipfs'
+  const [includes, setIncludes] = useState(false);
+  
   const get = async () => {
     let config = {
       method: 'get',
@@ -36,7 +28,10 @@ const DAOs = props => {
       .request(config)
       .then(response => {
         response.data.map((data, index) => {
-          names.push(data.name)
+          names.push(data.name);
+          if(data.name === reqSer){
+            setIncludes(true)
+          }
         })
         return
       })
@@ -44,14 +39,12 @@ const DAOs = props => {
         console.log(error)
       })
   }
-  const userSer = 'ipfsd'
-  const reqSer = 'ipfs'
   
   if (Discordparam && Daoparam) {
     get()
     return (
       <>
-        <ZKdiscord user={String(userSer.hashCode())} req = {String(reqSer.hashCode())}/>
+        <ZKdiscord user={String(Number(includes))} req = {String(Number(true))}/>
       </>
     )
   } else {
