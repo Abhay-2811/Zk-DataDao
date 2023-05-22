@@ -1,20 +1,32 @@
-interface IVerifier {
-    function verifyTx(Proof memory proof, uint[1] memory input) public view returns (bool r) 
-};
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-
-
-contract DAO{
-    struct Proof {
-        uint256[2] a;
-        uint256[2][2] b;
-        uint256[2] c;
+contract DAO {
+    address[] approved;
+    address public owner;
+    address[] public members;
+    uint256 public rewardAmount;
+    uint capacity;
+    
+    constructor(uint256 _rewardAmount, uint _capacity) payable  {
+        require(msg.value == _rewardAmount);
+        owner = msg.sender;
+        rewardAmount = _rewardAmount;
+        capacity = _capacity;
+    }
+    
+    function joinDAO() external {
+        require(members.length < capacity, "DAO is full");
+        members.push(msg.sender);
+    }
+    
+    function sendReward(address payable[] memory eligibleMembers) external payable{
+        require(msg.sender == owner, "Only owner can disburse rewards");
+        require(eligibleMembers.length <= members.length, "Eligible should be less than contributers");
+        uint amount = (rewardAmount)/(eligibleMembers.length);
+        for (uint256 i = 0; i < eligibleMembers.length; i++) {
+            eligibleMembers[i].transfer(amount);
+        }
     }
 
-    address public immutable verifier = 0xa2EaaE402F39C13387d61918cCCc72f945f4d1a4;
-
-    function verify(uint[1] memory publicSignals, Proof memory proof) public view returns(bool){
-        bool result = IVerifier(verifier).verifyTx(proof,publicSignals);
-        return result;
-    }
 }

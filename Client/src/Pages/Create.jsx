@@ -8,7 +8,7 @@
 import React, { useState } from 'react'
 import Select from 'react-select'
 import './create.css'
-import { createWalletClient, http, custom, createPublicClient } from 'viem'
+import { createWalletClient, http, custom, createPublicClient,parseUnits } from 'viem'
 import { filecoinHyperspace } from 'viem/chains'
 import { ContractData } from '../Constants/contract'
 import { useAccount } from 'wagmi'
@@ -121,7 +121,9 @@ const Create = () => {
     if (address) {
       const hash = await walletClient.deployContract({
         ...ContractData,
-        account: address
+        account: address,
+        args:[parseUnits(daoReward,18),daoCapacity],
+        value: parseUnits(daoReward,18)
       })
       setHash(hash)
       const receipt = await publicClient.waitForTransactionReceipt({ hash })
@@ -132,7 +134,8 @@ const Create = () => {
       // table for collection of DAOs
       // const {meta : create } = await db.prepare(`CREATE TABLE daos (contract_add text primary key, creator text, name text, min_commits integer, capacity integer, contributors integer, zkContraint_type text, zkContraint text,FormatReq_cid text, Reward integer)`).run();
       // const { name } = create.txn;
-      // TABLE ID : daos_3141_154
+      // console.log(name);
+      // TABLE ID : daos_3141_156
 
       // unique table for each dao
       // const { meta: create } = await db
@@ -141,7 +144,7 @@ const Create = () => {
       // const { name } = create.txn;
       //  TABLE ID : dao_data_3141_144
       const { meta: insert } = await db
-        .prepare(`INSERT INTO daos_3141_154 (contract_add, creator, name, min_commits, capacity, zkContraint_type, zkContraint, FormatReq_cid, Reward) VALUES (?,?,?,?,?,?,?,?,?);`)
+        .prepare(`INSERT INTO daos_3141_156 (contract_add, creator, name, min_commits, capacity, zkContraint_type, zkContraint, FormatReq_cid, Reward) VALUES (?,?,?,?,?,?,?,?,?);`)
         .bind(receipt.contractAddress,address,daoName,daoMinCommits,daoCapacity,selected,serverName,cid, daoReward)
         .run()
       await insert.txn.wait();
@@ -170,15 +173,15 @@ const Create = () => {
       ) : (
         <>
           {deployed.bool ? (
-            <div>
+            <h1 style={{ marginLeft: '10%', marginTop: '20%' }}>
               Contract deployed to{' '}
               <a
-                href={`https://mumbai.polygonscan.com/address/${deployed.address}`}
+                href={`https://hyperspace.filfox.info/en/address/${deployed.address}`}
                 target='_blank'
               >
                 {deployed.address}
               </a>
-            </div>
+            </h1>
           ) : (
             <div className='create-dao'>
               <h2>Create DAO</h2>
@@ -193,9 +196,9 @@ const Create = () => {
               <input type='number' name='minCommits' id='minCommits' min={1} onChange={handleMinCommitsChange}/>
 
               <label htmlFor='daoReward'>
-                DAO reward (this will be distributed equally among contributers)
+                DAO reward in TFIL (this will be distributed equally among contributers)
               </label>
-              <input type='number' id='daoReward' min={1} onChange={handleRewardChange}/>
+              <input type='number' id='daoReward' min={0} onChange={handleRewardChange}/>
 
               <label htmlFor='req'>Data Format Requirements</label>
               <UploadFile parentCallback={handleCIDcallback}/>
@@ -210,7 +213,7 @@ const Create = () => {
               />
 
               {selected && <SelectedOption option={selected} parentCallback={handleSelectChange}/>}
-              <button className='create-button' onClick={dummy}>
+              <button className='create-button' onClick={deployContract}>
                 <span class='button_top'> Create Dao</span>
               </button>
             </div>

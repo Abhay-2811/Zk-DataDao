@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
-import { daos } from '../Constants/fakeDAOs'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import ZKdiscord from '../Components/ZKdiscord'
 import Card from '../Components/Card'
+import { Database } from "@tableland/sdk";
+
+const table_daos = "daos_3141_156";
+const table_dao_data = "dao_data_3141_144";
+const db = new Database();
+
 
 const DAOs = props => {
   let names = new Array()
@@ -13,6 +18,7 @@ const DAOs = props => {
   const Daoparam = searchParams.get('dao')
   const reqSer = 'ipfs'
   const [includes, setIncludes] = useState(false);
+  const [tableData, setTableData] = useState()
   
   const get = async () => {
     let config = {
@@ -39,6 +45,14 @@ const DAOs = props => {
         console.log(error)
       })
   }
+
+  useEffect(()=>{
+    const getData = async() =>{
+      const { results } = await db.prepare(`SELECT * FROM ${table_daos};`).all();
+      setTableData(results);
+    }
+    getData();
+  },[])
   
   if (Discordparam && Daoparam) {
     get()
@@ -50,7 +64,13 @@ const DAOs = props => {
   } else {
     return (
       <>
-        <Card />
+        {
+          tableData?.map((value,index)=>(
+            <div key={index}>
+              <Card data={value} i={index}/>
+            </div>
+          ))
+        }
       </>
     )
   }

@@ -11,15 +11,16 @@ module.exports = async ({ deployments }) => {
     console.log("Wallet Ethereum Address:", wallet.address)
     
     //deploy DealClient
-    const DealClient = await ethers.getContractFactory('DealClient', wallet);
-    console.log('Deploying DealClient...');
-    const dc = await DealClient.deploy();
-    await dc.deployed()
-    console.log('DealClient deployed to:', dc.address);
+    // const DealClient = await ethers.getContractFactory('DealClient', wallet);
+    // console.log('Deploying DealClient...');
+    // const dc = await DealClient.deploy();
+    // await dc.deployed()
+    // console.log('DealClient deployed to:', dc.address);
 
-    const verifier = await ethers.getContractFactory('Verifier', wallet);
-    console.log('Deploying Verifier...');
-    const vf = await verifier.deploy();
-    await vf.deployed()
-    console.log('Verifier deployed to:', vf.address);
+    // const verifier = await ethers.getContractFactory('Verifier', wallet);
+    // console.log('Deploying Verifier...');
+    // const vf = await verifier.deploy();
+    // await vf.deployed()
+    // console.log('Verifier deployed to:', vf.address);
+
 }
