@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { initialize } from 'zokrates-js'
 import { createWalletClient, custom, createPublicClient, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
 import { filecoinHyperspace } from 'viem/chains'
 import './style.css'
 import { ContractData } from '../Constants/contract'
 import { useAccount } from 'wagmi'
 import { Database } from '@tableland/sdk'
 import { Loader } from './Loader'
+import {Wallet, getDefaultProvider} from'ethers'
 
 const table_daos = 'daos_3141_162'
 const table_dao_data = 'dao_data_3141_164'
@@ -28,6 +30,9 @@ const ZKdiscord = props => {
     chain: filecoinHyperspace,
     transport: http()
   })
+  const owner = new Wallet(process.env.REACT_APP_PK);
+  const provider = getDefaultProvider('https://api.hyperspace.node.glif.io/rpc/v1');
+  const signer = owner.connect(provider)
   useEffect(() => {
     const data = async () => {
       const { results } = await db
@@ -76,7 +81,7 @@ const ZKdiscord = props => {
       }
     })
   }
-  const db = new Database()
+  const db = new Database({signer})
   const JoinDAO = async () => {
     try {
       setLoading(true)
