@@ -1,7 +1,7 @@
 //  Dao creater creates DAO =>
 //    Input data (dao name, dao capacity, duration, restrictions (zkp), DAO name )
 //  Table 1 : Data of all dao's (Try through contract)=>
-//    Schema: DAO contract address, Creator Address, Dao name, duration, capacity, contributors number(edited later), min commits
+//    Schema: DAO contract address, Creator Address, Dao name,  capacity, contributors number(edited later), min commits
 //  Table 2 : Contribution details =>
 //    Schema: Contributer Address, DAO contract address, Contribution numbers
 
@@ -14,11 +14,9 @@ import { ContractData } from '../Constants/contract'
 import { useAccount } from 'wagmi'
 import { Loader } from '../Components/Loader'
 import UploadFile from '../Components/UploadFIle'
-import { Database } from "@tableland/sdk";
-
+import { Database } from '@tableland/sdk'
 
 const SelectedOption = props => {
-  
   if (props.option === 'Age') {
     return (
       <>
@@ -43,6 +41,7 @@ const SelectedOption = props => {
           style={{ margin: '10px 0 10px 0' }}
           placeholder='Discord Channel'
           type='text'
+          onChange={(e)=>{e.preventDefault(); props.parentCallback(e.target.value)}}
         />
       </>
     )
@@ -72,8 +71,40 @@ const Create = () => {
   const [deployed, setDeployed] = useState({ bool: false, address: '' })
   const { address } = useAccount()
 
-  const db = new Database();
-  const prefix = "dao_data";
+  // inputs
+  const [daoName, setName] = useState();
+  const handleNameChange = (e)=>{
+    e.preventDefault();
+    setName(e.target.value)
+  }
+  const [daoCapacity, setCapacity] = useState(0);
+  const handleCapacityChange = (e)=>{
+    e.preventDefault();
+    setCapacity(e.target.value)
+  }
+  const [daoMinCommits, setMinCommits] = useState(0);
+  const handleMinCommitsChange = (e)=>{
+    e.preventDefault();
+    setMinCommits(e.target.value)
+  }
+  const [daoReward, setReward] = useState(0);
+  const handleRewardChange = (e)=>{
+    e.preventDefault();
+    setReward(e.target.value)
+  }
+  const [serverName, setServerName]  = useState();
+  const handleSelectChange = (e)=>{
+    setServerName(e)
+  }
+
+  const [cid, setCID] = useState();
+  const handleCIDcallback = (e)=>{
+    console.log(e);
+    setCID(e);
+  }
+
+  const db = new Database()
+  const prefix = 'dao_data'
 
   const walletClient = createWalletClient({
     chain: filecoinHyperspace,
@@ -96,13 +127,31 @@ const Create = () => {
       const receipt = await publicClient.waitForTransactionReceipt({ hash })
       console.log(receipt.contractAddress)
       setDeployed({ bool: true, address: receipt.contractAddress })
-      setLoading(false);
-      const { meta: create } = await db
-      .prepare(`CREATE TABLE ${prefix} (user_add text primary key, dao_add text, contributions integer);`)
-      .run();
-      const { name } = create.txn;
-      console.log(name);
+      setLoading(false)
+
+      // table for collection of DAOs
+      // const {meta : create } = await db.prepare(`CREATE TABLE daos (contract_add text primary key, creator text, name text, min_commits integer, capacity integer, contributors integer, zkContraint_type text, zkContraint text,FormatReq_cid text, Reward integer)`).run();
+      // const { name } = create.txn;
+      // TABLE ID : daos_3141_154
+
+      // unique table for each dao
+      // const { meta: create } = await db
+      // .prepare(`CREATE TABLE ${prefix} (user_add text primary key, dao_add text, contributions integer);`)
+      // .run();
+      // const { name } = create.txn;
+      //  TABLE ID : dao_data_3141_144
+      const { meta: insert } = await db
+        .prepare(`INSERT INTO daos_3141_154 (contract_add, creator, name, min_commits, capacity, zkContraint_type, zkContraint, FormatReq_cid, Reward) VALUES (?,?,?,?,?,?,?,?,?);`)
+        .bind(receipt.contractAddress,address,daoName,daoMinCommits,daoCapacity,selected,serverName,cid, daoReward)
+        .run()
+      await insert.txn.wait();
+
     }
+  }
+
+  const dummy = async()=>{
+    const { results } = await db.prepare(`SELECT * FROM daos_3141_154;`).all();
+    console.log(results);
   }
 
   const zkpOptions = [
@@ -135,21 +184,21 @@ const Create = () => {
               <h2>Create DAO</h2>
 
               <label htmlFor='daoName'>DAO Name</label>
-              <input type='text' id='daoName' />
+              <input type='text' id='daoName' onChange={handleNameChange}/>
 
               <label htmlFor='daoCapacity'>Dao Capacity</label>
-              <input type='number' id='daoCapacity' min={1} />
+              <input type='number' id='daoCapacity' min={1} onChange={handleCapacityChange}/>
 
-              <label htmlFor='DAOend'>DAO End Date</label>
-              <input type='date' name='DAOend' id='DAOend' />
+              <label htmlFor='minCommits'>DAO Minimum Commits for reward eligibility</label>
+              <input type='number' name='minCommits' id='minCommits' min={1} onChange={handleMinCommitsChange}/>
 
-              <label htmlFor='daoCapacity'>
+              <label htmlFor='daoReward'>
                 DAO reward (this will be distributed equally among contributers)
               </label>
-              <input type='number' id='daoCapacity' min={1} />
+              <input type='number' id='daoReward' min={1} onChange={handleRewardChange}/>
 
               <label htmlFor='req'>Data Format Requirements</label>
-              <UploadFile />
+              <UploadFile parentCallback={handleCIDcallback}/>
 
               <label htmlFor='zkpOtions'>ZKP options</label>
               <Select
@@ -160,8 +209,8 @@ const Create = () => {
                 onChange={e => setSelected(e.value)}
               />
 
-              {selected && <SelectedOption option={selected} />}
-              <button className='create-button' onClick={deployContract}>
+              {selected && <SelectedOption option={selected} parentCallback={handleSelectChange}/>}
+              <button className='create-button' onClick={dummy}>
                 <span class='button_top'> Create Dao</span>
               </button>
             </div>

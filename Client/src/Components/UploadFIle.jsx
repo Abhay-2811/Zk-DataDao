@@ -5,7 +5,7 @@ import lighthouse from '@lighthouse-web3/sdk'
 import { ClipLoader  } from 'react-spinners'
 const CID = require('cids')
 
-const UploadFile = () => {
+const UploadFile = (props) => {
   const { address,isConnected } = useAccount()
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
@@ -44,8 +44,7 @@ const UploadFile = () => {
       'Visit at https://gateway.lighthouse.storage/ipfs/' + output.data.Hash
     )
     const hash = output.data.Hash;
-    console.log(hash);
-
+    props.parentCallback(hash);
     const carLink = `https://ipfs.io/ipfs/${hash}?format=car`
     await dataDeal(hash,carLink,fileSize);
 
