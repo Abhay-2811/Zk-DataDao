@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { initialize } from 'zokrates-js'
-import { createWalletClient, custom } from 'viem'
+import { createWalletClient, custom , createPublicClient, http} from 'viem'
 import {filecoinHyperspace} from 'viem/chains'
 import './style.css'
 import { ContractData } from '../Constants/contract'
 import { useAccount } from 'wagmi'
 import { Database } from '@tableland/sdk'
 
-const table_daos = "daos_3141_156";
-const table_dao_data = "dao_data_3141_144";
+const table_daos = "daos_3141_162";
+const table_dao_data = "dao_data_3141_164";
 
 const ZKdiscord = props => {
   const [res, setRes] = useState()
@@ -19,7 +19,18 @@ const ZKdiscord = props => {
   const walletClient = createWalletClient({
     chain: filecoinHyperspace,
     transport: custom(window.ethereum)
+  });
+  const publicClient = createPublicClient({
+    chain: filecoinHyperspace,
+    transport: http()
   })
+  useEffect(()=>{
+    const data = async()=>{
+      const { results } = await db.prepare(`SELECT * FROM ${table_dao_data};`).all();
+      console.log(results);
+    }
+    data()
+  },[])
 
   const handleSubmit = async () => {
     initialize().then(zokratesProvider => {
@@ -61,21 +72,24 @@ const ZKdiscord = props => {
   }
   const db = new Database()
   const JoinDAO = async () => {
-    // await walletClient.writeContract({
-    //   address: props.data.contract_add,
-    //   abi: ContractData.abi,
-    //   functionName: 'joinDAO',
-    //   account: address,
-    // });
-    console.log(props.data);
-    const current_cont = Number(props.data.contributors);
-    const new_cont = current_cont+1;
-    // console.log(new_cont);
-    const {meta: update} = await db.prepare(`UPDATE ${table_daos} SET contributors=${new_cont} WHERE contract_add=${props.data.contract_add}`).run();
-    await update.txn.wait();
+    const hash = await walletClient.writeContract({
+      address: props.data.contract_add,
+      abi: ContractData.abi,
+      functionName: 'joinDAO',
+      account: address,
+    });
+    // console.log(props.data);
+    const receipt = await publicClient.waitForTransactionReceipt({ hash });
+    console.log(receipt);
+    const { meta: insert } = await db
+        .prepare(`INSERT INTO ${table_dao_data} (user_add, dao_add, contributions) VALUES (?,?,?);`)
+        .bind(address,props.data.contract_add,0)
+        .run()
+      await insert.txn.wait();
   }
+  
 
-  return (
+  return ( 
     <div className='zk-page'>
       <button onClick={handleSubmit} className='zk-button'>
         <span className='zk-button_top'>Generate Proof</span>

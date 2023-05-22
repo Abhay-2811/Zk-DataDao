@@ -5,7 +5,7 @@ import ZKdiscord from '../Components/ZKdiscord'
 import Card from '../Components/Card'
 import { Database } from "@tableland/sdk";
 
-const table_daos = "daos_3141_156";
+const table_daos = "daos_3141_162";
 const table_dao_data = "dao_data_3141_144";
 const db = new Database();
 

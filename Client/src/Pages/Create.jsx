@@ -1,8 +1,13 @@
-
 import React, { useState } from 'react'
 import Select from 'react-select'
 import './create.css'
-import { createWalletClient, http, custom, createPublicClient,parseUnits } from 'viem'
+import {
+  createWalletClient,
+  http,
+  custom,
+  createPublicClient,
+  parseUnits
+} from 'viem'
 import { filecoinHyperspace } from 'viem/chains'
 import { ContractData } from '../Constants/contract'
 import { useAccount } from 'wagmi'
@@ -35,7 +40,10 @@ const SelectedOption = props => {
           style={{ margin: '10px 0 10px 0' }}
           placeholder='Discord Channel'
           type='text'
-          onChange={(e)=>{e.preventDefault(); props.parentCallback(e.target.value)}}
+          onChange={e => {
+            e.preventDefault()
+            props.parentCallback(e.target.value)
+          }}
         />
       </>
     )
@@ -66,35 +74,35 @@ const Create = () => {
   const { address } = useAccount()
 
   // inputs
-  const [daoName, setName] = useState();
-  const handleNameChange = (e)=>{
-    e.preventDefault();
+  const [daoName, setName] = useState()
+  const handleNameChange = e => {
+    e.preventDefault()
     setName(e.target.value)
   }
-  const [daoCapacity, setCapacity] = useState(0);
-  const handleCapacityChange = (e)=>{
-    e.preventDefault();
+  const [daoCapacity, setCapacity] = useState(0)
+  const handleCapacityChange = e => {
+    e.preventDefault()
     setCapacity(e.target.value)
   }
-  const [daoMinCommits, setMinCommits] = useState(0);
-  const handleMinCommitsChange = (e)=>{
-    e.preventDefault();
+  const [daoMinCommits, setMinCommits] = useState(0)
+  const handleMinCommitsChange = e => {
+    e.preventDefault()
     setMinCommits(e.target.value)
   }
-  const [daoReward, setReward] = useState(0);
-  const handleRewardChange = (e)=>{
-    e.preventDefault();
+  const [daoReward, setReward] = useState(0)
+  const handleRewardChange = e => {
+    e.preventDefault()
     setReward(e.target.value)
   }
-  const [serverName, setServerName]  = useState();
-  const handleSelectChange = (e)=>{
+  const [serverName, setServerName] = useState()
+  const handleSelectChange = e => {
     setServerName(e)
   }
 
-  const [cid, setCID] = useState();
-  const handleCIDcallback = (e)=>{
-    console.log(e);
-    setCID(e);
+  const [cid, setCID] = useState()
+  const handleCIDcallback = e => {
+    console.log(e)
+    setCID(e)
   }
 
   const db = new Database()
@@ -111,45 +119,58 @@ const Create = () => {
   })
 
   const deployContract = async () => {
-    setLoading(true)
-    if (address) {
-      const hash = await walletClient.deployContract({
-        ...ContractData,
-        account: address,
-        args:[parseUnits(daoReward,18),daoCapacity],
-        value: parseUnits(daoReward,18)
-      })
-      setHash(hash)
-      const receipt = await publicClient.waitForTransactionReceipt({ hash })
-      console.log(receipt.contractAddress)
-      setDeployed({ bool: true, address: receipt.contractAddress })
-      setLoading(false)
+    try {
+      setLoading(true)
+      if (address) {
+        const hash = await walletClient.deployContract({
+          ...ContractData,
+          account: address,
+          args: [parseUnits(daoReward, 18), daoCapacity],
+          value: parseUnits(daoReward, 18)
+        })
+        setHash(hash)
+        const receipt = await publicClient.waitForTransactionReceipt({ hash })
+        console.log(receipt.contractAddress)
+        setDeployed({ bool: true, address: receipt.contractAddress })
+        setLoading(false)
 
-      // table for collection of DAOs
-      // const {meta : create } = await db.prepare(`CREATE TABLE daos (contract_add text primary key, creator text, name text, min_commits integer, capacity integer, contributors integer, zkContraint_type text, zkContraint text,FormatReq_cid text, Reward integer)`).run();
-      // const { name } = create.txn;
-      // console.log(name);
-      // TABLE ID : daos_3141_156
-
-      // unique table for each dao
-      // const { meta: create } = await db
-      // .prepare(`CREATE TABLE ${prefix} (user_add text primary key, dao_add text, contributions integer);`)
-      // .run();
-      // const { name } = create.txn;
-      //  TABLE ID : dao_data_3141_144
-      const { meta: insert } = await db
-        .prepare(`INSERT INTO daos_3141_156 (contract_add, creator, name, min_commits, capacity, zkContraint_type, zkContraint, FormatReq_cid, Reward) VALUES (?,?,?,?,?,?,?,?,?);`)
-        .bind(receipt.contractAddress,address,daoName,daoMinCommits,daoCapacity,selected,serverName,cid, daoReward)
-        .run()
-      await insert.txn.wait();
-
+        //   // table for collection of DAOs
+        //   const {meta : create } = await db.prepare(`CREATE TABLE daos (contract_add text primary key, creator text, name text, min_commits integer, capacity integer, contributors integer, zkContraint_type text, zkContraint text,FormatReq_cid text, Reward integer)`).run();
+        //   const { name } = create.txn;
+        //   console.log(name);
+        // TABLE ID : daos_3141_162
+        // "0xca5b5ae9a41bf035f7b16cfc3a662f0a640d08f455763c97f83d7ac092159eb3"
+        // 
+        // unique table for each dao
+        // const { meta: create } = await db
+        // .prepare(`CREATE TABLE ${prefix} (id integer primary key,user_add text, dao_add text, contributions integer);`)
+        // .run();
+        // const { name } = create.txn;
+        // console.log(name);
+        //  TABLE ID : dao_data_3141_164
+        const { meta: insert } = await db
+          .prepare(
+            `INSERT INTO daos_3141_162 (contract_add, creator, name, min_commits, capacity, zkContraint_type, zkContraint, FormatReq_cid, Reward) VALUES (?,?,?,?,?,?,?,?,?);`
+          )
+          .bind(
+            receipt.contractAddress,
+            address,
+            daoName,
+            daoMinCommits,
+            daoCapacity,
+            selected,
+            serverName,
+            cid,
+            daoReward
+          )
+          .run()
+        await insert.txn.wait()
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
-  const dummy = async()=>{
-    const { results } = await db.prepare(`SELECT * FROM daos_3141_154;`).all();
-    console.log(results);
-  }
 
   const zkpOptions = [
     { label: 'None', value: 'none' },
@@ -181,21 +202,40 @@ const Create = () => {
               <h2>Create DAO</h2>
 
               <label htmlFor='daoName'>DAO Name</label>
-              <input type='text' id='daoName' onChange={handleNameChange}/>
+              <input type='text' id='daoName' onChange={handleNameChange} />
 
               <label htmlFor='daoCapacity'>Dao Capacity</label>
-              <input type='number' id='daoCapacity' min={1} onChange={handleCapacityChange}/>
+              <input
+                type='number'
+                id='daoCapacity'
+                min={1}
+                onChange={handleCapacityChange}
+              />
 
-              <label htmlFor='minCommits'>DAO Minimum Commits for reward eligibility</label>
-              <input type='number' name='minCommits' id='minCommits' min={1} onChange={handleMinCommitsChange}/>
+              <label htmlFor='minCommits'>
+                DAO Minimum Commits for reward eligibility
+              </label>
+              <input
+                type='number'
+                name='minCommits'
+                id='minCommits'
+                min={1}
+                onChange={handleMinCommitsChange}
+              />
 
               <label htmlFor='daoReward'>
-                DAO reward in TFIL (this will be distributed equally among contributers)
+                DAO reward in TFIL (this will be distributed equally among
+                contributers)
               </label>
-              <input type='number' id='daoReward' min={0} onChange={handleRewardChange}/>
+              <input
+                type='number'
+                id='daoReward'
+                min={0}
+                onChange={handleRewardChange}
+              />
 
               <label htmlFor='req'>Data Format Requirements</label>
-              <UploadFile parentCallback={handleCIDcallback}/>
+              <UploadFile parentCallback={handleCIDcallback} />
 
               <label htmlFor='zkpOtions'>ZKP options</label>
               <Select
@@ -206,7 +246,12 @@ const Create = () => {
                 onChange={e => setSelected(e.value)}
               />
 
-              {selected && <SelectedOption option={selected} parentCallback={handleSelectChange}/>}
+              {selected && (
+                <SelectedOption
+                  option={selected}
+                  parentCallback={handleSelectChange}
+                />
+              )}
               <button className='create-button' onClick={deployContract}>
                 <span class='button_top'> Create Dao</span>
               </button>
