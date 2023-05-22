@@ -1,9 +1,3 @@
-//  Dao creater creates DAO =>
-//    Input data (dao name, dao capacity, duration, restrictions (zkp), DAO name )
-//  Table 1 : Data of all dao's (Try through contract)=>
-//    Schema: DAO contract address, Creator Address, Dao name,  capacity, contributors number(edited later), min commits
-//  Table 2 : Contribution details =>
-//    Schema: Contributer Address, DAO contract address, Contribution numbers
 
 import React, { useState } from 'react'
 import Select from 'react-select'

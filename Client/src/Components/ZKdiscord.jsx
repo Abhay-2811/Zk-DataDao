@@ -46,6 +46,10 @@ const ZKdiscord = props => {
     })
   }
 
+  const JoinDAO = ()=>{
+	
+  }
+
   return (
     <div className='zk-page'>
       <button onClick={handleSubmit} className='zk-button'>
@@ -59,7 +63,7 @@ const ZKdiscord = props => {
         <>
           {showProof ? <p>{res}</p> : <p></p>}
           {verification ? <p>✅ Verified</p> : <></>}
-          <button className='dao-button'>
+          <button className='dao-button' onClick={JoinDAO}>
             <span className='zk-button_top'>Join DAO</span>
           </button>
         </>
