@@ -183,7 +183,7 @@ const Create = () => {
     <>
       {loading ? (
         <div style={{ marginLeft: '50%', marginTop: '20%' }}>
-          <Loader />
+          <Loader text='Deploying Contract'/>
         </div>
       ) : (
         <>

@@ -1,13 +1,33 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUsers} from '@fortawesome/free-solid-svg-icons'
 import {faDiscord} from '@fortawesome/free-brands-svg-icons'
+import {createPublicClient, http} from 'viem';
+import { filecoinHyperspace } from 'viem/chains'
+import { ContractData } from '../Constants/contract'
+
 function Card(props) {
-    const daoADD = 'abc';
-    // useEffect(()=>{
-    //     console.log(props.data);
-    // })
+    const daoADD = props.data.contract_add;
+    const publicClient = createPublicClient({
+      chain: filecoinHyperspace,
+      transport: http()
+    });
+    const [contributors, setContri] = useState(0)
+    useEffect(()=>{
+        const getContractData = async()=>{
+          try {
+            const data = await publicClient.readContract({
+              address: props.data.contract_add,
+              abi: ContractData.abi,
+              functionName: 'totalContributors',
+            }).then((res)=>{console.log(res);setContri(res)})
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        getContractData()
+    },[])
   return (
     <div className="cards">
     <div className="leftSection">
@@ -27,7 +47,7 @@ function Card(props) {
       </div>
       <div className="group">
         <label>Current DAO Contributors : </label>
-        <p> <b>{Number(props.data.contributors)}/{props.data.capacity}</b></p>
+        <p> <b>{Number(contributors)}/{props.data.capacity}</b></p>
       </div>
       <div className="group">
         <label>Joining Condition: </label>

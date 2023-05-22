@@ -6,10 +6,12 @@
     margin-top: 20px;
     justify-content: space-between;
     font-family: 'Segoe UI', sans-serif;
+
 }
 
 .create-dao h2{
-    margin-left: 35%;
+    margin-left: 40%;
+    margin-bottom: 50px;
 }
 
 .create-dao input {
@@ -23,7 +25,8 @@
 
 .create-dao button{
     width: 200px;
-    margin-top: 10px;
+    margin-top: 20px;
+    margin-bottom: 50px;
 }
 
 .create-button {
