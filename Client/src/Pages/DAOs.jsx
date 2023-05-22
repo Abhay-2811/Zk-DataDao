@@ -17,6 +17,7 @@ const DAOs = props => {
   const Discordparam = location.hash?.split('&')[1]?.split('=')[1]
   const Daoparam = searchParams.get('dao')
   const reqSer = 'ipfs'
+  
   const [includes, setIncludes] = useState(false);
   const [tableData, setTableData] = useState()
   
@@ -49,6 +50,7 @@ const DAOs = props => {
   useEffect(()=>{
     const getData = async() =>{
       const { results } = await db.prepare(`SELECT * FROM ${table_daos};`).all();
+      console.log(results);
       setTableData(results);
     }
     getData();
@@ -58,7 +60,7 @@ const DAOs = props => {
     get()
     return (
       <>
-        <ZKdiscord user={String(Number(includes))} req = {String(Number(true))}/>
+        <ZKdiscord user={String(Number(includes))} req ={String(Number(true))} data={tableData ? tableData[Number(Daoparam)] : 0}/>
       </>
     )
   } else {

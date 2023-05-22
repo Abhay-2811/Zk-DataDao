@@ -19,7 +19,7 @@ function Card(props) {
       </div>
       <div className="group">
         <label>Reward Pool :</label>
-        <p> <b>${props.data.Reward}</b></p>
+        <p> <b>{props.data.Reward} TFIL</b></p>
       </div>
       <div className="group">
         <label>DAO capacity : </label>

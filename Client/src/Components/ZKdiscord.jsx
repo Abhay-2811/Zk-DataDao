@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { initialize } from 'zokrates-js'
+import { createWalletClient, custom } from 'viem'
+import {filecoinHyperspace} from 'viem/chains'
 import './style.css'
+import { ContractData } from '../Constants/contract'
+import { useAccount } from 'wagmi'
+import { Database } from '@tableland/sdk'
+
+const table_daos = "daos_3141_156";
+const table_dao_data = "dao_data_3141_144";
+
 const ZKdiscord = props => {
   const [res, setRes] = useState()
   const [showProof, setShowProof] = useState(false)
   const [err, setErr] = useState()
   const [verification, setVerification] = useState(false)
+  const { address } = useAccount()
+  const walletClient = createWalletClient({
+    chain: filecoinHyperspace,
+    transport: custom(window.ethereum)
+  })
 
   const handleSubmit = async () => {
     initialize().then(zokratesProvider => {
       try {
-		console.log(props.user,props.req);
+        console.log(props.user, props.req)
         const source =
           'def main(private field a, field b) {assert(a == b); return;}'
 
@@ -40,14 +54,25 @@ const ZKdiscord = props => {
         setRes(JSON.stringify(formatedProof[0]))
         setShowProof(true)
       } catch (error) {
-		console.log(error);
+        console.log(error)
         setErr(error)
       }
     })
   }
-
-  const JoinDAO = ()=>{
-	
+  const db = new Database()
+  const JoinDAO = async () => {
+    // await walletClient.writeContract({
+    //   address: props.data.contract_add,
+    //   abi: ContractData.abi,
+    //   functionName: 'joinDAO',
+    //   account: address,
+    // });
+    console.log(props.data);
+    const current_cont = Number(props.data.contributors);
+    const new_cont = current_cont+1;
+    // console.log(new_cont);
+    const {meta: update} = await db.prepare(`UPDATE ${table_daos} SET contributors=${new_cont} WHERE contract_add=${props.data.contract_add}`).run();
+    await update.txn.wait();
   }
 
   return (
