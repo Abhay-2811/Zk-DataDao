@@ -120,6 +120,37 @@
   display: flex;
 }
 
+.commit-data {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 20px;
+  justify-content: space-between;
+  font-family: 'Segoe UI', sans-serif;
+  align-items: center;
+}
+
+.commit-data h2{
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.commit-data input {
+  margin: 10px 0 10px 0;
+  border: 2px solid rgb(200, 200, 200);
+  border-radius: 20px;
+  width: 100%;
+  padding: 0.8em;
+
+}
+
+.commit-data button{
+  width: 200px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
 .op-profile-container {
 
 }

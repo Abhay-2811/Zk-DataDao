@@ -32,7 +32,7 @@ const Profile = () => {
     <fieldset id='switch' className='radio'>
       <input name='switch' id='user' type='radio' onChange={handleUserChange}/>
       <label for='user'>User </label>
-      <input name='switch' id='operator' type='radio' checked="" onChange={handleOpChange}/>
+      <input name='switch' id='operator' type='radio'  onChange={handleOpChange}/>
       <label for='operator'>DAO Operator</label>
     </fieldset>
     {
