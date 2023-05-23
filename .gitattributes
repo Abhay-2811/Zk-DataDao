@@ -1,1 +1,1 @@
-*.assembly linguist-detectable=false
+*.wasm linguist-detectable=false
