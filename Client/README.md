@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# ZK-DataDao
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Buy or Sell Data Without Comprimising Your Privacy 🤯 
+By using ZK-DataDao
+DAO creators can implement contributor's constraints and create a Zero-Knowledge Barrier ,
+Users can generate verifiable proofs using ZK-SNARK and prove that they are eligible to participate in DAO
+
 
 ## Available Scripts
 
