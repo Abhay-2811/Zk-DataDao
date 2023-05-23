@@ -10,7 +10,14 @@ const Home = () => {
       await update.txn.wait();
   }
   return (
-    <button onClick={dummy}>CLick</button>
+    <fieldset style={{marginLeft:'40px',textAlign:'center'}}>
+    <h1>
+      Buy or Sell Data Without Comprimising Your Privacy 🤯 <br /> By using ZK-DataDao
+    </h1>
+    <p style={{fontWeight:'normal',fontSize:'25px',lineHeight:'40px',marginTop:'50px'}}>
+      DAO creators can implement contributor's constraints and create a <b> Zero-Knowledge Barrier </b>, <br />Users can generate verifiable proofs using <b> ZK-SNARK </b>and prove that they are eligible to participate in DAO
+    </p>
+    </fieldset>
   )
 }
 

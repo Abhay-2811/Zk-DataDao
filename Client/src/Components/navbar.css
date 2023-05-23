@@ -1,6 +1,27 @@
 .nav-list{
     display: flex;
     align-items: center;
-    margin-left: 25%;
-    
+    margin: 20px;
+    text-decoration: none;
+    font-size: large;
+}
+.nav-list ul{
+    text-decoration: none;
+    width: max-content;
+}
+.nav-list a{
+    text-decoration: none;
+    font-weight: 600;
+    color: black;
+}
+.nav-list a.active{
+    text-decoration: underline;
+}
+.mid-section{
+    display: flex;
+    margin-left: 20%;
+}
+
+.right-section{
+    margin-left: 20%;
 }
