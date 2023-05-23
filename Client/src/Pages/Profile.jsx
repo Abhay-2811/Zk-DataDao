@@ -1,19 +1,44 @@
-import React, { useEffect } from 'react'
-import { Database } from "@tableland/sdk";
-import { useAccount } from 'wagmi';
+import React, { useEffect, useState } from 'react'
+import './profile.css'
+import Userprofile from '../Components/Userprofile'
+import Operatorporfile from '../Components/Operatorporfile'
+
 const Profile = () => {
-  const db = new Database();
-  const table_dao_data = "dao_data_3141_164";
-  const {address} = useAccount();
-  useEffect(()=>{
-    const getInfo = async()=>{
-      const { results } = await db.prepare(`SELECT * FROM ${table_dao_data} WHERE user_add="${address}";`).all();
-      console.log(results);
+ 
+  const [profile, setProfile] = useState('user');
+
+  
+  const SelectedProfile = (props) => {
+    if(props.sel === 'user'){
+      return (
+        <Userprofile />
+      )
     }
-    getInfo()
-  },[])
+    if(props.sel ==='operator'){
+    return (
+      <Operatorporfile />
+    )
+  }
+  }
+
+  const handleUserChange = ()=>{
+    setProfile('user');
+  }
+  const handleOpChange = ()=>{
+    setProfile('operator');
+  }
   return (
-    <div>Profile</div>
+    <>
+    <fieldset id='switch' className='radio'>
+      <input name='switch' id='user' type='radio' onChange={handleUserChange}/>
+      <label for='user'>User </label>
+      <input name='switch' id='operator' type='radio' checked="" onChange={handleOpChange}/>
+      <label for='operator'>DAO Operator</label>
+    </fieldset>
+    {
+      profile && <SelectedProfile sel={profile}/>
+    }
+    </>
   )
 }
 

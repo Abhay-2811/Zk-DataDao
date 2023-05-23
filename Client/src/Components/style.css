@@ -1,105 +1,125 @@
-.zk-page{
-    display: flex;
-    flex-direction: column;
-    width: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+.zk-page {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
 }
-.zk-page p{
-    overflow-x: scroll;
+
+.zk-page p {
+  overflow-x: scroll;
 }
+
 .zk-button {
-    --button_radius: 0.75em;
-    --button_color: #e8e8e8;
-    --button_outline_color: #000000;
-    font-size: 17px;
-    font-weight: bold;
-    border: none;
-    border-radius: var(--button_radius);
-    background: var(--button_outline_color);
-    margin: 20px;
+  --button_radius: 0.75em;
+  --button_color: #e8e8e8;
+  --button_outline_color: #000000;
+  font-size: 17px;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--button_radius);
+  background: var(--button_outline_color);
+  margin: 20px;
 }
+
 .dao-button {
-    margin: 20px;
-    --button_radius: 0.75em;
-    --button_color: #e8e8e8;
-    --button_outline_color: #000000;
-    font-size: 17px;
-    font-weight: bold;
-    border: none;
-    border-radius: var(--button_radius);
-    background: var(--button_outline_color);
+  margin: 20px;
+  --button_radius: 0.75em;
+  --button_color: #e8e8e8;
+  --button_outline_color: #000000;
+  font-size: 17px;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--button_radius);
+  background: var(--button_outline_color);
 }
+
 .zk-button_top {
-    display: block;
-    box-sizing: border-box;
-    border: 2px solid var(--button_outline_color);
-    border-radius: var(--button_radius);
-    padding: 0.75em 1.5em;
-    background: var(--button_color);
-    color: var(--button_outline_color);
-    transform: translateY(-0.2em);
-    transition: transform 0.1s ease;
+  display: block;
+  box-sizing: border-box;
+  border: 2px solid var(--button_outline_color);
+  border-radius: var(--button_radius);
+  padding: 0.75em 1.5em;
+  background: var(--button_color);
+  color: var(--button_outline_color);
+  transform: translateY(-0.2em);
+  transition: transform 0.1s ease;
 }
 
 .zk-button:hover .zk-button_top {
-    /* Pull the button upwards when hovered */
-    transform: translateY(-0.33em);
+  /* Pull the button upwards when hovered */
+  transform: translateY(-0.33em);
 }
 
 .zk-button:active .zk-button_top {
-    /* Push the button downwards when pressed */
-    transform: translateY(0);
-}
-.dao-button:hover .zk-button_top{
-    /* Pull the button upwards when hovered */
-    transform: translateY(-0.33em);
+  /* Push the button downwards when pressed */
+  transform: translateY(0);
 }
 
-.dao-button:active .zk-button_top{
-    /* Push the button downwards when pressed */
-    transform: translateY(0);
+.dao-button:hover .zk-button_top {
+  /* Pull the button upwards when hovered */
+  transform: translateY(-0.33em);
 }
+
+.dao-button:active .zk-button_top {
+  /* Push the button downwards when pressed */
+  transform: translateY(0);
+}
+
 .cards {
-    /* border: 1px solid red; */
-    margin: 25px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    padding: 20px 30px;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #f0f4ff;
-    border-radius: 8px;
-    box-shadow: 4px 4px 5px gray;
-  }
-  .leftSection{
-    width: 60%;
-  }
-  .title {
-    font-size: 25px;
-    color: #1b1475;
-  }
-  .dec {
-    color: #888ba5;
-    font-size: 20px;
-    margin-top: 10px;
-  }
-  .group {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 5px;
-    font-size: 18px;
-  }
-  .group img{
-    height: 29px;
-  }
-  .middleSection {
-    font-size: 25px;
-    color: #1b1475;
-  }
+  /* border: 1px solid red; */
+  margin: 25px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  padding: 20px 30px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f0f4ff;
+  border-radius: 8px;
+  box-shadow: 4px 4px 5px gray;
+}
+
+.leftSection {
+  width: 60%;
+}
+
+.title {
+  font-size: 25px;
+  color: #1b1475;
+}
+
+.dec {
+  color: #888ba5;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+  font-size: 18px;
+}
+
+.group img {
+  height: 29px;
+}
+
+.middleSection {
+  font-size: 25px;
+  color: #1b1475;
+}
+
+.user-profile-container {
+  display: flex;
+}
+
+.op-profile-container {
+
+}
